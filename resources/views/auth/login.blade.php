@@ -1,80 +1,45 @@
 <x-guest-layout>
-    <h2 class="auth-card-title mb-4">{{ __('Login') }}</h2>
+    <div class="auth-card">
+        <h2 class="mb-4 text-center text-xl font-semibold">{{ __('Sign in to your account') }}</h2>
 
-    <!-- Session Status -->
-    @if (session('status'))
-        <div class="alert alert-success mb-4" role="alert">
-            {{ session('status') }}
-        </div>
-    @endif
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
-        <!-- Email Address -->
-        <div class="mb-3">
-            <label for="email" class="form-label">{{ __('Email') }}</label>
-            <input id="email" class="form-control @error('email') is-invalid @enderror" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" />
-            @error('email')
-                <div class="invalid-feedback d-block">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
-
-        <!-- Password -->
-        <div class="mb-3">
-            <label for="password" class="form-label">{{ __('Password') }}</label>
-            <div class="input-group">
-                <input id="password" class="form-control @error('password') is-invalid @enderror" type="password" name="password" required autocomplete="current-password" />
-                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()" tabindex="-1">
-                    <span id="togglePasswordIcon" class="fa fa-eye"></span>
-                </button>
+        @if ($errors->any())
+            <div class="alert alert-danger mb-4">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
-            @error('password')
-                <div class="invalid-feedback d-block">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
-        <script>
-            function togglePassword() {
-                const pwd = document.getElementById('password');
-                const icon = document.getElementById('togglePasswordIcon');
-                if (pwd.type === 'password') {
-                    pwd.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    pwd.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
-            }
-        </script>
-
-        <!-- Remember Me -->
-        <div class="mb-3 form-check">
-            <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
-            <label for="remember_me" class="form-check-label">{{ __('Remember me') }}</label>
-        </div>
-
-        <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary-gradient">
-                {{ __('Log in') }}
-            </button>
-        </div>
-
-        @if (Route::has('password.request'))
-            <a class="auth-link mt-3" href="{{ route('password.request') }}">
-                {{ __('Forgot your password?') }}
-            </a>
         @endif
-        
-        @if (Route::has('register'))
-            <a class="auth-link mt-2" href="{{ route('register') }}">
-                {{ __("Don't have an account? Register") }}
-            </a>
-        @endif
-    </form>
+
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email" class="form-label">{{ __('Email') }}</label>
+                <input id="email" class="form-control" type="email" name="email" value="{{ old('email') }}" required autofocus />
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+                <label for="password" class="form-label">{{ __('Password') }}</label>
+                <input id="password" class="form-control" type="password" name="password" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">{{ __('Login') }}</button>
+
+            <div class="text-center mt-3">
+                <a href="{{ route('register') }}">{{ __("Don't have an account? Register") }}</a>
+            </div>
+        </form>
+    </div>
 </x-guest-layout>

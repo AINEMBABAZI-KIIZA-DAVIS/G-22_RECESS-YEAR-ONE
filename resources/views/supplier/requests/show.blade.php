@@ -1,60 +1,64 @@
-@extends('layouts.app') {{-- Assuming a general app layout --}}
+@extends('layouts.app')
 
 @section('header')
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+    <h2 class="fw-semibold fs-4 text-secondary">
         {{ __('Supply Request Details') }} #{{ $supplyRequest->id }}
     </h2>
 @endsection
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 bg-white border-b border-gray-200">
-                <div class="flex justify-between items-start mb-6">
+<div class="py-4">
+    <div class="container-lg">
+        <div class="card shadow-sm">
+            <div class="card-body border-bottom">
+                <div class="d-flex justify-content-between align-items-start mb-4">
                     <div>
-                        <h3 class="text-lg font-medium text-gray-900">Request ID: #{{ $supplyRequest->id }}</h3>
-                        <p class="text-sm text-gray-500">Requested on: {{ $supplyRequest->created_at->format('F d, Y \a\t H:i A') }}</p>
+                        <h3 class="fs-5 fw-medium mb-1">Request ID: #{{ $supplyRequest->id }}</h3>
+                        <p class="small text-secondary mb-0">Requested on: {{ $supplyRequest->created_at->format('F d, Y \a\t h:i A') }}</p>
                     </div>
-                    <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
-                        @if($supplyRequest->status == 'pending') bg-yellow-100 text-yellow-800 @endif
-                        @if($supplyRequest->status == 'confirmed_by_manufacturer') bg-green-100 text-green-800 @endif
-                        @if($supplyRequest->status == 'rejected') bg-red-100 text-red-800 @endif
-                        @if($supplyRequest->status == 'fulfilled') bg-blue-100 text-blue-800 @endif
-                    ">
+                    @php
+                        $statusClass = match($supplyRequest->status) {
+                            'pending' => 'bg-warning bg-opacity-10 text-warning',
+                            'confirmed_by_manufacturer' => 'bg-success bg-opacity-10 text-success',
+                            'rejected' => 'bg-danger bg-opacity-10 text-danger',
+                            'fulfilled' => 'bg-primary bg-opacity-10 text-primary',
+                            default => 'bg-secondary bg-opacity-10 text-secondary',
+                        };
+                    @endphp
+                    <span class="badge rounded-pill px-3 py-1 fs-7 fw-semibold {{ $statusClass }}">
                         {{ ucfirst(str_replace('_', ' ', $supplyRequest->status)) }}
                     </span>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <h4 class="font-semibold text-gray-700 mb-1">Product Information</h4>
-                        <p><strong class="text-gray-600">Name/Description:</strong> {{ $supplyRequest->product_name }}</p>
-                        <p><strong class="text-gray-600">Quantity Requested:</strong> {{ $supplyRequest->quantity }}</p>
+                <div class="row gy-4">
+                    <div class="col-md-6">
+                        <h4 class="fw-semibold text-secondary mb-2">Product Information</h4>
+                        <p><strong class="text-secondary">Name/Description:</strong> {{ $supplyRequest->product_name }}</p>
+                        <p><strong class="text-secondary">Quantity Requested:</strong> {{ $supplyRequest->quantity }}</p>
                     </div>
-                    <div>
-                        <h4 class="font-semibold text-gray-700 mb-1">Dates</h4>
-                        <p><strong class="text-gray-600">Confirmed by Manufacturer:</strong> {{ $supplyRequest->confirmed_at ? $supplyRequest->confirmed_at->format('F d, Y') : 'Not yet confirmed' }}</p>
-                        <p><strong class="text-gray-600">Fulfilled:</strong> {{ $supplyRequest->fulfilled_at ? $supplyRequest->fulfilled_at->format('F d, Y') : 'Not yet fulfilled' }}</p>
+                    <div class="col-md-6">
+                        <h4 class="fw-semibold text-secondary mb-2">Dates</h4>
+                        <p><strong class="text-secondary">Confirmed by Manufacturer:</strong> {{ $supplyRequest->confirmed_at ? $supplyRequest->confirmed_at->format('F d, Y') : 'Not yet confirmed' }}</p>
+                        <p><strong class="text-secondary">Fulfilled:</strong> {{ $supplyRequest->fulfilled_at ? $supplyRequest->fulfilled_at->format('F d, Y') : 'Not yet fulfilled' }}</p>
                     </div>
                 </div>
 
                 @if($supplyRequest->notes)
-                <div class="mt-6">
-                    <h4 class="font-semibold text-gray-700 mb-1">Your Notes:</h4>
-                    <p class="text-gray-600 bg-gray-50 p-3 rounded-md">{{ $supplyRequest->notes }}</p>
+                <div class="mt-4">
+                    <h4 class="fw-semibold text-secondary mb-2">Your Notes:</h4>
+                    <p class="text-secondary bg-light p-3 rounded">{{ $supplyRequest->notes }}</p>
                 </div>
                 @endif
 
                 @if($supplyRequest->manufacturer_notes)
-                <div class="mt-6">
-                    <h4 class="font-semibold text-gray-700 mb-1">Manufacturer Notes:</h4>
-                    <p class="text-gray-600 bg-yellow-50 p-3 rounded-md">{{ $supplyRequest->manufacturer_notes }}</p>
+                <div class="mt-4">
+                    <h4 class="fw-semibold text-secondary mb-2">Manufacturer Notes:</h4>
+                    <p class="text-warning bg-warning bg-opacity-10 p-3 rounded">{{ $supplyRequest->manufacturer_notes }}</p>
                 </div>
                 @endif
 
-                <div class="mt-8 border-t pt-6">
-                    <a href="{{ url()->previous() }}" class="text-sm text-blue-600 hover:text-blue-900 underline">
+                <div class="mt-5 border-top pt-4">
+                    <a href="{{ url()->previous() }}" class="small text-primary text-decoration-underline">
                         &larr; Back to Requests List
                     </a>
                 </div>

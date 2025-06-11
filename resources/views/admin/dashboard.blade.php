@@ -112,7 +112,7 @@
             <a class="nav-link" href="{{ route('admin.workers.index') }}"><i class="fas fa-users me-2"></i> Workers</a>
             <a class="nav-link" href="{{ route('admin.analytics.index') }}"><i class="fas fa-chart-line me-2"></i> Analytics</a>
             <a class="nav-link" href="{{ route('admin.settings.index') }}"><i class="fas fa-cog me-2"></i> Settings</a>
-            <a class="nav-link" href="{{ route('analytics.index') }}"><i class="fas fa-file-alt me-2"></i> View Reports</a>
+         <a class="nav-link"><i class="fas fa-file-alt me-2"></i> View Reports</a> 
             <a class="nav-link" href="{{ route('supplier.requests.list') }}"><i class="fas fa-paper-plane me-2"></i> View Sent Requests</a>
             <a class="nav-link" href="#" onclick="alert('Chat coming soon!')"><i class="fas fa-comments me-2"></i> Chat</a>
             <form method="POST" action="{{ route('logout') }}" class="mt-auto">
