@@ -55,7 +55,7 @@
         <section class="hero">
             <div class="container">
                 <h1>Welcome to Premium Bakery</h1>
-                <p>Effortlessly manage your inventory, orders, and analytics with our modern, secure, and user-friendly system.</p>
+                <p>Effortlessly manage inventory, orders, and analytics with our modern, secure and user-friendly system.</p>
                 <a href="{{ route('login') }}" class="btn btn-light text-primary"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
                 <a href="{{ route('register') }}" class="btn btn-primary"><i class="fas fa-user-plus me-2"></i>Register</a>
             </div>
@@ -67,14 +67,14 @@
                         <div class="feature-card h-100">
                             <div class="feature-icon"><i class="fas fa-boxes"></i></div>
                             <h5>Inventory Tracking</h5>
-                            <p>Monitoring stock levels, getting low-stock alerts, and keeping inventory organized in real time.</p>
+                            <p>Monitor stock levels, get low-stock alerts, and keep inventory organized in real time.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="feature-card h-100">
                             <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
                             <h5>Analytics & Reports</h5>
-                            <p>Visualizing trends, sales, and performance with beautiful charts and downloadable reports.</p>
+                            <p>Visualize trends, sales, and performance with beautiful charts and downloadable reports.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
