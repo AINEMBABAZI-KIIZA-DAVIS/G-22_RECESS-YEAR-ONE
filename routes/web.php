@@ -60,7 +60,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth'])
     ->group(function () {
-        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/admin/dashboard', [AdminDashboardController::class, 'index']);
         Route::resource('workers', WorkerController::class);
         Route::resource('products', ProductController::class);
         Route::resource('orders', OrderController::class)->except(['create', 'store']);
