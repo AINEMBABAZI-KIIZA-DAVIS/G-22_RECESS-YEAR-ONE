@@ -10,7 +10,7 @@
         <style>
             body { font-family: 'Inter', Arial, sans-serif; background: #f8fafc; }
             .hero {
-                background: url('https://images.unsplash.com/photo-1543876604-b8ac0e7ded00?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+                background: url('https://images.pexels.com/photos/31597725/pexels-photo-31597725/free-photo-of-freshly-baked-sugary-buns-on-trays.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
                 color: #fff;
                 padding: 80px 0 60px 0;
                 text-align: center;
@@ -43,7 +43,7 @@
                 height: 100%;
             }
             footer {
-                background: #22223b;
+                background:rgb(53, 122, 255);
                 color: #fff;
                 padding: 24px 0;
                 text-align: center;
