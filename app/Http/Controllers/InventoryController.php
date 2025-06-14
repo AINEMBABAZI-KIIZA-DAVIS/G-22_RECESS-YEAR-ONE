@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Http\Controllers\Controller;
+=======
+>>>>>>> e72e3ddb854304ac41a2bc0bbe2697d461996cb6
 use App\Models\Product;
 use Illuminate\Http\Request;
 

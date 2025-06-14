@@ -174,9 +174,15 @@
                 <h5 class="mb-3">Recent Activity</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Order #1234 placed by John Doe <span class="badge bg-success ms-2">Completed</span></li>
+<<<<<<< HEAD
                     <li class="list-group-item">Product "Bread" stock low <span class="badge bg-warning ms-2">Low Stock</span></li>
                     <li class="list-group-item">Order #1235 placed by Jane Smith <span class="badge bg-info ms-2">Processing</span></li>
                     <li class="list-group-item">Product "Cake" added to inventory <span class="badge bg-primary ms-2">New</span></li>
+=======
+                    <li class="list-group-item">Product "Wireless Mouse" stock low <span class="badge bg-warning ms-2">Low Stock</span></li>
+                    <li class="list-group-item">Order #1235 placed by Jane Smith <span class="badge bg-info ms-2">Processing</span></li>
+                    <li class="list-group-item">Product "Laptop" added to inventory <span class="badge bg-primary ms-2">New</span></li>
+>>>>>>> e72e3ddb854304ac41a2bc0bbe2697d461996cb6
                 </ul>
             </div>
         </main>
@@ -215,7 +221,11 @@
     new Chart(ctx2, {
         type: 'bar',
         data: {
+<<<<<<< HEAD
             labels: ['Bread', 'Cake', 'Cookie', 'Biscuit', 'Snack'],
+=======
+            labels: ['Laptop', 'Mouse', 'Keyboard', 'Monitor', 'Printer'],
+>>>>>>> e72e3ddb854304ac41a2bc0bbe2697d461996cb6
             datasets: [{
                 label: 'Units Sold',
                 data: [320, 210, 180, 150, 120],
