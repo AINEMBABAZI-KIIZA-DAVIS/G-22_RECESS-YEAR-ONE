@@ -67,14 +67,14 @@
                         <div class="feature-card h-100">
                             <div class="feature-icon"><i class="fas fa-boxes"></i></div>
                             <h5>Inventory Tracking</h5>
-                            <p>Monitor stock levels, get low-stock alerts, and keep your inventory organized in real time.</p>
+                            <p>Monitoring stock levels, getting low-stock alerts, and keeping inventory organized in real time.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="feature-card h-100">
                             <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
                             <h5>Analytics & Reports</h5>
-                            <p>Visualize trends, sales, and performance with beautiful charts and downloadable reports.</p>
+                            <p>Visualizing trends, sales, and performance with beautiful charts and downloadable reports.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -89,7 +89,7 @@
         </section>
         <footer>
             <div class="container">
-                &copy; {{ date('Y') }} InventoryPro. All rights reserved.
+                &copy; {{ date('Y') }} PremiumBakery. All rights reserved.
             </div>
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
