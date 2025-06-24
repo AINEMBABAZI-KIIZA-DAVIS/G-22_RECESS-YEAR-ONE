@@ -12,24 +12,24 @@ class WholesalerController extends Controller
         $products = [
             (object)[
                 'id' => 1,
-                'name' => 'Premium Rice (50kg)',
-                'price' => 95000,
-                'image' => 'https://via.placeholder.com/150',
-                'description' => 'High-quality long grain rice for bulk buyers.',
+                'name' => 'Premium Cupcakes ',
+                'price' => 50000,
+                'image' => 'https://images.unsplash.com/photo-1583823140300-13976ffcd426?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                'description' => 'Delicious cupcakes available for bulk buyers.',
             ],
             (object)[
                 'id' => 2,
-                'name' => 'Cooking Oil (20L)',
-                'price' => 120000,
-                'image' => 'https://via.placeholder.com/150',
-                'description' => 'Refined vegetable oil ideal for commercial use.',
+                'name' => 'Premium Cookies',
+                'price' => 30000,
+                'image' => 'https://plus.unsplash.com/premium_photo-1668863373830-c50ca78857cb?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                'description' => 'Freshly baked cookies available in bulk.',
             ],
             (object)[
                 'id' => 3,
-                'name' => 'Wheat Flour (25kg)',
-                'price' => 85000,
-                'image' => 'https://via.placeholder.com/150',
-                'description' => 'Top-quality flour suitable for baking and cooking.',
+                'name' => 'Yummy Bread',
+                'price' => 20000,
+                'image' => 'https://plus.unsplash.com/premium_photo-1710108920120-b4c0463bb82d?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                'description' => 'Freshly baked bread available for wholesale.',
             ],
         ];
 
