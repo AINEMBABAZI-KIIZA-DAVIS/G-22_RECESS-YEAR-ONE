@@ -174,9 +174,9 @@
                 <h5 class="mb-3">Recent Activity</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Order #1234 placed by John Doe <span class="badge bg-success ms-2">Completed</span></li>
-                    <li class="list-group-item">Product "Wireless Mouse" stock low <span class="badge bg-warning ms-2">Low Stock</span></li>
+                    <li class="list-group-item">Product "Cakes" stock low <span class="badge bg-warning ms-2">Low Stock</span></li>
                     <li class="list-group-item">Order #1235 placed by Jane Smith <span class="badge bg-info ms-2">Processing</span></li>
-                    <li class="list-group-item">Product "Laptop" added to inventory <span class="badge bg-primary ms-2">New</span></li>
+                    <li class="list-group-item">Product "Cookies" added to inventory <span class="badge bg-primary ms-2">New</span></li>
                 </ul>
             </div>
         </main>
@@ -215,7 +215,7 @@
     new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['Laptop', 'Mouse', 'Keyboard', 'Monitor', 'Printer'],
+            labels: ['Cakes', 'Bread', 'Cookies', 'Buns', 'Donuts'],
             datasets: [{
                 label: 'Units Sold',
                 data: [320, 210, 180, 150, 120],
