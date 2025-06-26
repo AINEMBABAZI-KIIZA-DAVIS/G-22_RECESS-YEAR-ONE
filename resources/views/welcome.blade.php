@@ -10,7 +10,7 @@
         <style>
             body { font-family: 'Inter', Arial, sans-serif; background: #f8fafc; }
             .hero {
-                background: linear-gradient(135deg, #357aff 60%, #5eead4 100%);
+                background: url('https://images.pexels.com/photos/31597725/pexels-photo-31597725/free-photo-of-freshly-baked-sugary-buns-on-trays.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
                 color: #fff;
                 padding: 80px 0 60px 0;
                 text-align: center;
@@ -43,7 +43,7 @@
                 height: 100%;
             }
             footer {
-                background: #22223b;
+                background:rgb(53, 122, 255);
                 color: #fff;
                 padding: 24px 0;
                 text-align: center;
@@ -55,7 +55,7 @@
         <section class="hero">
             <div class="container">
                 <h1>Welcome to Premium Bakery</h1>
-                <p>Effortlessly manage your inventory, orders, and analytics with our modern, secure, and user-friendly system.</p>
+                <p>Effortlessly manage inventory, orders, and analytics with our modern, secure and user-friendly system.</p>
                 <a href="{{ route('login') }}" class="btn btn-light text-primary"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
                 <a href="{{ route('register') }}" class="btn btn-primary"><i class="fas fa-user-plus me-2"></i>Register</a>
             </div>
@@ -67,7 +67,7 @@
                         <div class="feature-card h-100">
                             <div class="feature-icon"><i class="fas fa-boxes"></i></div>
                             <h5>Inventory Tracking</h5>
-                            <p>Monitor stock levels, get low-stock alerts, and keep your inventory organized in real time.</p>
+                            <p>Monitor stock levels, get low-stock alerts, and keep inventory organized in real time.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -89,7 +89,7 @@
         </section>
         <footer>
             <div class="container">
-                &copy; {{ date('Y') }} InventoryPro. All rights reserved.
+                &copy; {{ date('Y') }} PremiumBakery. All rights reserved.
             </div>
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

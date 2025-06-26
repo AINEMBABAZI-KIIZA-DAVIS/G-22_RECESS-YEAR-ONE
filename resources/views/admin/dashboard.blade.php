@@ -174,9 +174,9 @@
                 <h5 class="mb-3">Recent Activity</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Order #1234 placed by John Doe <span class="badge bg-success ms-2">Completed</span></li>
-                    <li class="list-group-item">Product "Wireless Mouse" stock low <span class="badge bg-warning ms-2">Low Stock</span></li>
+                    <li class="list-group-item">Product "Bread" stock low <span class="badge bg-warning ms-2">Low Stock</span></li>
                     <li class="list-group-item">Order #1235 placed by Jane Smith <span class="badge bg-info ms-2">Processing</span></li>
-                    <li class="list-group-item">Product "Laptop" added to inventory <span class="badge bg-primary ms-2">New</span></li>
+                    <li class="list-group-item">Product "Cake" added to inventory <span class="badge bg-primary ms-2">New</span></li>
                 </ul>
             </div>
         </main>
@@ -185,6 +185,15 @@
 <!-- Bootstrap 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Chart.js -->
+<script>
+    // Prepare PHP data for JavaScript
+    const inventoryLabels = @json($inventory->pluck('month')->toArray()); 
+    const inventoryValues = @json($inventory->pluck('level')->toArray());
+
+    const productLabels = @json($products->pluck('name')->toArray()); 
+    const productValues = @json($products->pluck('units_sold')->toArray()); 
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Inventory Trends Chart
@@ -192,10 +201,10 @@
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            labels: inventoryLabels,
             datasets: [{
                 label: 'Stock Level',
-                data: [1200, 1150, 1100, 1050, 1000, 950, 1250],
+                data: inventoryValues,
                 borderColor: '#357aff',
                 backgroundColor: 'rgba(53, 122, 255, 0.1)',
                 tension: 0.4,
@@ -215,10 +224,10 @@
     new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ['Laptop', 'Mouse', 'Keyboard', 'Monitor', 'Printer'],
+            labels: productLabels,
             datasets: [{
                 label: 'Units Sold',
-                data: [320, 210, 180, 150, 120],
+                data: productValues,
                 backgroundColor: [
                     '#357aff', '#5eead4', '#fbbf24', '#f87171', '#a78bfa'
                 ],
