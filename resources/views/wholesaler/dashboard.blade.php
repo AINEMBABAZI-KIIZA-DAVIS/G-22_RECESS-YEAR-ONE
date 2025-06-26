@@ -17,7 +17,7 @@
                 <p class="text-muted">Manage your wholesale orders and inventory with ease.</p>
             </header>
 
-            <!-- Quick Actions Section -->
+            <!-- Quick Actions -->
             <div class="row g-4 mb-5">
                 <div class="col-md-4">
                     <a href="{{ route('wholesaler.products.index') }}" class="d-block text-decoration-none p-3 rounded bg-primary-subtle border-start border-primary border-4 shadow-sm text-primary">
@@ -82,4 +82,3 @@
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 @endsection
-
