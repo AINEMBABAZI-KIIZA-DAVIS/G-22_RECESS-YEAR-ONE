@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
 use App\Http\Controllers\Controller;
-=======
->>>>>>> e72e3ddb854304ac41a2bc0bbe2697d461996cb6
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class InventoryController extends Controller
 {
     // GET /products
     public function index()
