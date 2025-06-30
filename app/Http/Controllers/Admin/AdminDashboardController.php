@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 class AdminDashBoardController extends Controller
 {
-    public function showDashboard()
+    public function index()
     {
         // Query from MySQL
         $inventory = DB::table('inventory_levels')->get();
