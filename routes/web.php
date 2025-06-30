@@ -58,19 +58,24 @@ Route::middleware(['auth'])->group(function () {
 
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(['auth'])
+    ->middleware(['auth', 'admin']) // Add 'admin' middleware here
     ->group(function () {
-        Route::get('/admin/dashboard', [AdminDashboardController::class, 'index']);
+        // Admin Dashboard Route
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        
+        // Admin Resources
         Route::resource('workers', WorkerController::class);
         Route::resource('products', ProductController::class);
         Route::resource('orders', OrderController::class)->except(['create', 'store']);
-
+        
+        // Supply Requests
         Route::get('supply-requests', [AdminSupplyRequestController::class, 'index'])->name('supply-requests.index');
         Route::get('supply-requests/{supplyRequest}', [AdminSupplyRequestController::class, 'show'])->name('supply-requests.show');
         Route::patch('supply-requests/{supplyRequest}/confirm', [AdminSupplyRequestController::class, 'confirm'])->name('supply-requests.confirm');
         Route::patch('supply-requests/{supplyRequest}/reject', [AdminSupplyRequestController::class, 'reject'])->name('supply-requests.reject');
         Route::patch('supply-requests/{supplyRequest}/fulfill', [AdminSupplyRequestController::class, 'fulfill'])->name('supply-requests.fulfill');
 
+        // Admin Features
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');

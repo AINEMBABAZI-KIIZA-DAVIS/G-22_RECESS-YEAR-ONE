@@ -20,8 +20,9 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url('/') }}">
+                <i class="bi bi-basket3 me-2"></i>
+                <span>Premium Bakery</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">

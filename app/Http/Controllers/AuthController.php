@@ -41,14 +41,20 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // Redirect to appropriate dashboard based on role
-            return match ($user->role) {
-                'admin'     => redirect()->route('admin.dashboard'),
-                'supplier'  => redirect()->route('supplier.dashboard'),
-                default     => redirect()->route('wholesaler.products.index'),
-            };
+            switch ($user->role) {
+                case 'admin':
+                    return redirect()->route('admin.dashboard');
+                case 'supplier':
+                    return redirect()->route('supplier.dashboard');
+                case 'wholesaler':
+                    return redirect()->route('wholesaler.products.index');
+                default:
+                    Auth::logout();
+                    return back()->with('error', 'Invalid user role');
+            }
         }
 
-        return back()->with('error', 'Invalid credentials');
+        return back()->with('error', 'The provided credentials do not match our records.');
     }
 
     public function logout(Request $request)
