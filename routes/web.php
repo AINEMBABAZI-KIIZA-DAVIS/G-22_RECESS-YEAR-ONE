@@ -95,12 +95,19 @@ Route::prefix('supplier')
     ->name('supplier.')
     ->middleware(['auth'])
     ->group(function () {
+        // Dashboard
         Route::get('/dashboard', [SupplierDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/requests/create', [SupplierDashboardController::class, 'createRequestForm'])->name('requests.create');
-        Route::post('/requests', [SupplierDashboardController::class, 'storeRequest'])->name('requests.store');
-        Route::get('/requests', [SupplierDashboardController::class, 'listRequests'])->name('requests.list');
-        Route::get('/requests/confirmed', [SupplierDashboardController::class, 'listConfirmedRequests'])->name('requests.confirmed');
-        Route::get('/requests/{supplyRequest}', [SupplierDashboardController::class, 'showRequest'])->name('requests.show');
+        
+        // Supply Requests
+        Route::prefix('requests')->name('requests.')->group(function() {
+            Route::get('/', [SupplierDashboardController::class, 'indexRequests'])->name('index');
+            Route::get('/pending', [SupplierDashboardController::class, 'indexRequests'])->name('pending')->defaults('status', 'pending');
+            Route::get('/create', [SupplierDashboardController::class, 'createRequestForm'])->name('create');
+            Route::post('/', [SupplierDashboardController::class, 'storeRequest'])->name('store');
+            Route::get('/confirmed', [SupplierDashboardController::class, 'indexRequests'])->name('confirmed')->defaults('status', 'confirmed_by_manufacturer');
+            Route::get('/fulfilled', [SupplierDashboardController::class, 'indexRequests'])->name('fulfilled')->defaults('status', 'fulfilled');
+            Route::get('/{supplyRequest}', [SupplierDashboardController::class, 'showRequest'])->name('show');
+        });
     });
 
 /*

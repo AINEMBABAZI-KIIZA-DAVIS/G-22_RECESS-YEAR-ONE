@@ -42,6 +42,36 @@ class SupplierDashboardController extends Controller
             'user' => $user
         ]);
     }
+    
+    /**
+     * Display a listing of the supplier's requests.
+     */
+    public function indexRequests(Request $request)
+    {
+        $user = Auth::user();
+        $status = $request->query('status');
+        
+        $query = SupplyRequest::where('user_id', $user->id);
+        
+        if ($status && in_array($status, ['pending', 'confirmed_by_manufacturer', 'fulfilled', 'rejected'])) {
+            $query->where('status', $status);
+        }
+        
+        $requests = $query->latest()->paginate(10);
+        
+        return view('supplier.requests.index', [
+            'requests' => $requests,
+            'status' => $status,
+            'statusCounts' => [
+                'all' => SupplyRequest::where('user_id', $user->id)->count(),
+                'pending' => SupplyRequest::where('user_id', $user->id)->where('status', 'pending')->count(),
+                'confirmed' => SupplyRequest::where('user_id', $user->id)->where('status', 'confirmed_by_manufacturer')->count(),
+                'fulfilled' => SupplyRequest::where('user_id', $user->id)->where('status', 'fulfilled')->count(),
+                'rejected' => SupplyRequest::where('user_id', $user->id)->where('status', 'rejected')->count(),
+            ],
+            'user' => $user
+        ]);
+    }
 
     /**
      * Show the form for creating a new supply request.
@@ -70,7 +100,7 @@ class SupplierDashboardController extends Controller
             'status' => 'pending', // Default status
         ]);
 
-        return redirect()->route('supplier.requests.list')
+        return redirect()->route('supplier.requests.index')
                          ->with('success', 'Supply request submitted successfully.');
     }
 

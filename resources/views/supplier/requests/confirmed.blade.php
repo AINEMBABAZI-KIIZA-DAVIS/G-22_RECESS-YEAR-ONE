@@ -41,7 +41,7 @@
                                     </td>
                                     <td>{{ $request->confirmed_at ? $request->confirmed_at->format('M d, Y') : 'N/A' }}</td>
                                     <td>
-                                        <a href="{{ route('supplier.requests.show', $request->id) }}" class="link-primary">
+                                        <a href="{{ route('supplier.requests.show', $request) }}" class="link-primary">
                                             View Details
                                         </a>
                                     </td>

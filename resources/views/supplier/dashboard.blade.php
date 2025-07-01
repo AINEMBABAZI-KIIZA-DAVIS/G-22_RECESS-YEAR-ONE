@@ -37,7 +37,7 @@
                         </div>
                         @if($pendingRequestsCount > 0)
                         <div class="mt-3">
-                            <a href="{{ route('supplier.requests.index', ['status' => 'pending']) }}" class="text-decoration-none small" style="color: #e76f51;">
+                            <a href="{{ route('supplier.requests.pending') }}" class="text-decoration-none small" style="color: #e76f51;">
                                 View all pending requests <i class="bi bi-arrow-right"></i>
                             </a>
                         </div>
@@ -99,7 +99,7 @@
                 </div>
 
                 <div class="col-md-4">
-                    <a href="{{ route('supplier.requests.list') }}" class="card h-100 border-0 shadow-sm text-decoration-none hover-lift">
+                    <a href="{{ route('supplier.requests.index') }}" class="card h-100 border-0 shadow-sm text-decoration-none hover-lift">
                         <div class="card-body text-center p-4">
                             <div class="bg-info bg-opacity-10 text-info rounded-circle p-3 d-inline-flex mb-3" style="width: 60px; height: 60px;">
                                 <i class="fas fa-list-alt fs-3 m-auto"></i>
