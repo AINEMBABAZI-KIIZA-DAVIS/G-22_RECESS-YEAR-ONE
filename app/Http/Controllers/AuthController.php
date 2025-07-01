@@ -33,25 +33,43 @@ class AuthController extends Controller
         $request->validate([
             'email'    => 'required|email',
             'password' => 'required',
+            '_token'   => 'required|string', // Ensure CSRF token is present
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
-            $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
 
+        if (Auth::attempt($credentials, $remember)) {
+            // Regenerate the session ID for security
+            $request->session()->regenerate();
+            
+            // Regenerate CSRF token
+            $request->session()->regenerateToken();
+            
             $user = Auth::user();
 
-            // Redirect to appropriate dashboard based on role
-            switch ($user->role) {
-                case 'admin':
-                    return redirect()->route('admin.dashboard');
-                case 'supplier':
-                    return redirect()->route('supplier.dashboard');
-                case 'wholesaler':
-                    return redirect()->route('wholesaler.products.index');
-                default:
-                    Auth::logout();
-                    return back()->with('error', 'Invalid user role');
+            // Add user info to session
+            session([
+                'user_id' => $user->id,
+                'user_role' => $user->role,
+                'user_name' => $user->name,
+            ]);
+
+            // Redirect to intended URL or role-based dashboard
+            $route = match($user->role) {
+                'admin' => route('admin.dashboard'),
+                'supplier' => route('supplier.dashboard'),
+                'wholesaler' => route('wholesaler.products.index'),
+                default => null
+            };
+
+            if (!$route) {
+                Auth::logout();
+                return back()->with('error', 'Invalid user role');
             }
+
+            return redirect()->intended($route)
+                ->with('status', 'Welcome back, ' . ucfirst($user->role) . '!');
         }
 
         return back()->with('error', 'The provided credentials do not match our records.');

@@ -8,31 +8,40 @@ class WholesalerController extends Controller
 {
     public function index()
     {
-        // Dummy product data
-        $products = [
-            (object)[
-                'id' => 1,
-                'name' => 'Premium Rice (50kg)',
-                'price' => 95000,
-                'image' => 'https://via.placeholder.com/150',
-                'description' => 'High-quality long grain rice for bulk buyers.',
-            ],
-            (object)[
-                'id' => 2,
-                'name' => 'Cooking Oil (20L)',
-                'price' => 120000,
-                'image' => 'https://via.placeholder.com/150',
-                'description' => 'Refined vegetable oil ideal for commercial use.',
-            ],
-            (object)[
-                'id' => 3,
-                'name' => 'Wheat Flour (25kg)',
-                'price' => 85000,
-                'image' => 'https://via.placeholder.com/150',
-                'description' => 'Top-quality flour suitable for baking and cooking.',
-            ],
-        ];
+        // Get dashboard statistics
+        $activeOrders = \App\Models\Order::where('user_id', auth()->id())
+            ->where('status', '!=', 'completed')
+            ->count();
 
-        return view('wholesaler.dashboard', compact('products'));
+        $pendingPayments = \App\Models\Order::where('user_id', auth()->id())
+            ->where('payment_status', 'pending')
+            ->sum('total_amount');
+
+        $recentOrders = \App\Models\Order::where('user_id', auth()->id())
+            ->where('status', 'completed')
+            ->where('created_at', '>=', now()->subDays(30))
+            ->count();
+
+        // Get stock statistics
+        $inStockItems = \App\Models\Product::where('stock', '>', 0)->count();
+        $lowStockItems = \App\Models\Product::where('stock', '<=', 10)->where('stock', '>', 0)->count();
+        $outOfStockItems = \App\Models\Product::where('stock', 0)->count();
+
+        // Get available products
+        $products = \App\Models\Product::where('stock', '>', 0)
+            ->with('images')
+            ->latest()
+            ->take(6)
+            ->get();
+
+        return view('wholesaler.dashboard', compact(
+            'products',
+            'activeOrders',
+            'pendingPayments',
+            'recentOrders',
+            'inStockItems',
+            'lowStockItems',
+            'outOfStockItems'
+        ));
     }
 }

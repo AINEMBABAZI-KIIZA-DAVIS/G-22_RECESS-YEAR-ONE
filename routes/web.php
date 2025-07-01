@@ -19,7 +19,11 @@ use App\Http\Controllers\SupplierDashboardController;
 
 use App\Http\Controllers\User\userproductDisplayController;
 use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\Wholesaler\WholesalerCartController;
 use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\Wholesaler\ProductsController;
+use App\Http\Controllers\Wholesaler\WholesalerOrderController;
+use App\Http\Controllers\Wholesaler\WholesalerPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,12 +114,26 @@ Route::prefix('wholesaler')
     ->middleware(['auth'])
     ->group(function () {
         Route::get('/dashboard', [WholesalerController::class, 'index'])->name('products.index');
-        Route::get('/products/{id}', [userproductDisplayController::class, 'show'])->name('products.show');
+        Route::resource('products', ProductsController::class, ['only' => ['index', 'show', 'lowStock', 'outOfStock']]);
+        Route::get('/products/low-stock', [ProductsController::class, 'lowStock'])->name('products.low-stock');
+        Route::get('/products/out-of-stock', [ProductsController::class, 'outOfStock'])->name('products.out-of-stock');
 
-        Route::post('/cart/add/{productId}', [CartController::class, 'add'])->name('cart.add');
-        Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
-        Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+        // Cart Routes
+        Route::post('/cart/add/{productId}', [WholesalerCartController::class, 'add'])->name('cart.add');
+        Route::get('/cart', [WholesalerCartController::class, 'show'])->name('cart.show');
+        Route::delete('/cart/remove/{id}', [WholesalerCartController::class, 'remove'])->name('cart.remove');
 
+        // Checkout Routes
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout', [CheckoutController::class, 'place'])->name('checkout.place');
+
+        // Order Routes
+        Route::get('/orders', [WholesalerOrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [WholesalerOrderController::class, 'show'])->name('orders.show');
+        Route::get('/orders/history', [WholesalerOrderController::class, 'history'])->name('orders.history');
+
+        // Payment Routes
+        Route::get('/payments', [WholesalerPaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/{order}', [WholesalerPaymentController::class, 'show'])->name('payments.show');
+        Route::post('/payments/{order}/pay', [WholesalerPaymentController::class, 'pay'])->name('payments.pay');
     });
