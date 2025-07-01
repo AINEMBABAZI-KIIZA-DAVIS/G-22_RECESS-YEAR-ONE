@@ -28,16 +28,20 @@
                     <div class="h-100 p-4 rounded-3 shadow-sm" style="background: linear-gradient(135deg, #fff8f6 0%, #fff0ed 100%); border-left: 4px solid #e76f51;">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <small class="text-uppercase" style="color: #e76f51; font-weight: 600;">Pending Requests</small>
+                                <small class="text-uppercase" style="color: #e76f51; font-weight: 600;">Your Pending Requests</small>
                                 <div class="fs-2 fw-bold mt-1" style="color: #2b2d42;">{{ $pendingRequestsCount }}</div>
                             </div>
                             <div class="bg-white rounded-circle p-3 shadow-sm" style="color: #e76f51;">
                                 <i class="fas fa-hourglass-half fs-4"></i>
                             </div>
                         </div>
+                        @if($pendingRequestsCount > 0)
                         <div class="mt-3">
-                            <small class="text-muted"><i class="bi bi-arrow-up-circle-fill text-success"></i> 12% from last month</small>
+                            <a href="{{ route('supplier.requests.index', ['status' => 'pending']) }}" class="text-decoration-none small" style="color: #e76f51;">
+                                View all pending requests <i class="bi bi-arrow-right"></i>
+                            </a>
                         </div>
+                        @endif
                     </div>
                 </div>
 
@@ -126,49 +130,65 @@
             </div>
 
             <!-- Recent Activity -->
+            @if($recentRequests->count() > 0)
             <div class="row mt-4">
                 <div class="col-12">
                     <div class="card border-0 shadow-sm mt-4">
                         <div class="card-header bg-white border-0 pt-4">
                             <h5 class="mb-0" style="color: #2b2d42;">
-                                <i class="bi bi-clock-history me-2"></i>Recent Activity
+                                <i class="bi bi-clock-history me-2"></i>Your Recent Requests
                             </h5>
                         </div>
-                        <div class="card-body">
-                            <div class="d-flex mb-4">
-                                <div class="flex-shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1511018556340-d16986a1c194?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="rounded-circle me-3" width="50" height="50" alt="Activity">
+                        <div class="card-body p-0">
+                            <div class="list-group list-group-flush">
+                                @foreach($recentRequests as $request)
+                                <div class="list-group-item border-0 py-3">
+                                    <div class="d-flex align-items-center">
+                                        @php
+                                            $icon = 'bi-hourglass';
+                                            $color = '#ff9800';
+                                            if($request->status === 'confirmed_by_manufacturer') {
+                                                $icon = 'bi-check-circle';
+                                                $color = '#4caf50';
+                                            } elseif($request->status === 'fulfilled') {
+                                                $icon = 'bi-check2-all';
+                                                $color = '#2196f3';
+                                            } elseif($request->status === 'rejected') {
+                                                $icon = 'bi-x-circle';
+                                                $color = '#f44336';
+                                            }
+                                        @endphp
+                                        <div class="rounded-circle p-2 me-3" style="background-color: {{ $color }}20;">
+                                            <i class="bi {{ $icon }}" style="color: {{ $color }};"></i>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-0" style="color: #2b2d42;">
+                                                    {{ ucfirst(str_replace('_', ' ', $request->status)) }}: {{ $request->product_name }}
+                                                </h6>
+                                                <small class="text-muted">{{ $request->created_at->diffForHumans() }}</small>
+                                            </div>
+                                            <p class="mb-0 text-muted small">
+                                                Quantity: {{ $request->quantity }}
+                                                @if($request->notes)
+                                                    • {{ Str::limit($request->notes, 50) }}
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h6 class="mb-1" style="color: #2b2d42;">New order received</h6>
-                                    <p class="text-muted small mb-0">Order #BKR-2023-001 has been placed and is pending confirmation.</p>
-                                    <small class="text-muted">2 hours ago</small>
-                                </div>
+                                @endforeach
                             </div>
-                            <div class="d-flex mb-4">
-                                <div class="flex-shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="rounded-circle me-3" width="50" height="50" alt="Activity">
-                                </div>
-                                <div>
-                                    <h6 class="mb-1" style="color: #2b2d42;">Order shipped</h6>
-                                    <p class="text-muted small mb-0">Your order #BKR-2023-045 has been shipped and is on its way.</p>
-                                    <small class="text-muted">1 day ago</small>
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="rounded-circle me-3" width="50" height="50" alt="Activity">
-                                </div>
-                                <div>
-                                    <h6 class="mb-1" style="color: #2b2d42;">New menu items available</h6>
-                                    <p class="text-muted small mb-0">Check out our new seasonal bakery items now available for order.</p>
-                                    <small class="text-muted">2 days ago</small>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="card-footer bg-white border-0 text-center py-3">
+                            <a href="{{ route('supplier.requests.index') }}" class="text-decoration-none" style="color: #e76f51;">
+                                View all your requests <i class="bi bi-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+            @endif
 
         </div>
     </div>

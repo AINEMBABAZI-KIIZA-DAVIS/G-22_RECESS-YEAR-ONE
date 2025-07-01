@@ -14,21 +14,33 @@ class SupplierDashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
+        
+        // Get counts for the dashboard cards
         $pendingRequestsCount = SupplyRequest::where('user_id', $user->id)
                                            ->where('status', 'pending')
                                            ->count();
+                                           
         $confirmedRequestsCount = SupplyRequest::where('user_id', $user->id)
                                              ->where('status', 'confirmed_by_manufacturer')
                                              ->count();
+                                             
         $fulfilledRequestsCount = SupplyRequest::where('user_id', $user->id)
                                              ->where('status', 'fulfilled')
                                              ->count();
+        
+        // Get the latest requests for the activity feed
+        $recentRequests = SupplyRequest::where('user_id', $user->id)
+                                     ->latest()
+                                     ->take(5)
+                                     ->get();
 
-        return view('supplier.dashboard', compact(
-            'pendingRequestsCount',
-            'confirmedRequestsCount',
-            'fulfilledRequestsCount'
-        ));
+        return view('supplier.dashboard', [
+            'pendingRequestsCount' => $pendingRequestsCount,
+            'confirmedRequestsCount' => $confirmedRequestsCount,
+            'fulfilledRequestsCount' => $fulfilledRequestsCount,
+            'recentRequests' => $recentRequests,
+            'user' => $user
+        ]);
     }
 
     /**
