@@ -19,7 +19,11 @@ use App\Http\Controllers\SupplierDashboardController;
 
 use App\Http\Controllers\User\userproductDisplayController;
 use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\Wholesaler\WholesalerCartController;
 use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\Wholesaler\ProductsController;
+use App\Http\Controllers\Wholesaler\WholesalerOrderController;
+use App\Http\Controllers\Wholesaler\WholesalerPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,19 +62,24 @@ Route::middleware(['auth'])->group(function () {
 
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware(['auth'])
+    ->middleware(['auth', 'admin']) // Add 'admin' middleware here
     ->group(function () {
+        // Admin Dashboard Route
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        
+        // Admin Resources
         Route::resource('workers', WorkerController::class);
         Route::resource('products', ProductController::class);
         Route::resource('orders', OrderController::class)->except(['create', 'store']);
-
+        
+        // Supply Requests
         Route::get('supply-requests', [AdminSupplyRequestController::class, 'index'])->name('supply-requests.index');
         Route::get('supply-requests/{supplyRequest}', [AdminSupplyRequestController::class, 'show'])->name('supply-requests.show');
         Route::patch('supply-requests/{supplyRequest}/confirm', [AdminSupplyRequestController::class, 'confirm'])->name('supply-requests.confirm');
         Route::patch('supply-requests/{supplyRequest}/reject', [AdminSupplyRequestController::class, 'reject'])->name('supply-requests.reject');
         Route::patch('supply-requests/{supplyRequest}/fulfill', [AdminSupplyRequestController::class, 'fulfill'])->name('supply-requests.fulfill');
 
+        // Admin Features
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
@@ -86,12 +95,19 @@ Route::prefix('supplier')
     ->name('supplier.')
     ->middleware(['auth'])
     ->group(function () {
+        // Dashboard
         Route::get('/dashboard', [SupplierDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/requests/create', [SupplierDashboardController::class, 'createRequestForm'])->name('requests.create');
-        Route::post('/requests', [SupplierDashboardController::class, 'storeRequest'])->name('requests.store');
-        Route::get('/requests', [SupplierDashboardController::class, 'listRequests'])->name('requests.list');
-        Route::get('/requests/confirmed', [SupplierDashboardController::class, 'listConfirmedRequests'])->name('requests.confirmed');
-        Route::get('/requests/{supplyRequest}', [SupplierDashboardController::class, 'showRequest'])->name('requests.show');
+        
+        // Supply Requests
+        Route::prefix('requests')->name('requests.')->group(function() {
+            Route::get('/', [SupplierDashboardController::class, 'indexRequests'])->name('index');
+            Route::get('/pending', [SupplierDashboardController::class, 'indexRequests'])->name('pending')->defaults('status', 'pending');
+            Route::get('/create', [SupplierDashboardController::class, 'createRequestForm'])->name('create');
+            Route::post('/', [SupplierDashboardController::class, 'storeRequest'])->name('store');
+            Route::get('/confirmed', [SupplierDashboardController::class, 'indexRequests'])->name('confirmed')->defaults('status', 'confirmed_by_manufacturer');
+            Route::get('/fulfilled', [SupplierDashboardController::class, 'indexRequests'])->name('fulfilled')->defaults('status', 'fulfilled');
+            Route::get('/{supplyRequest}', [SupplierDashboardController::class, 'showRequest'])->name('show');
+        });
     });
 
 /*
@@ -105,12 +121,26 @@ Route::prefix('wholesaler')
     ->middleware(['auth'])
     ->group(function () {
         Route::get('/dashboard', [WholesalerController::class, 'index'])->name('products.index');
-        Route::get('/products/{id}', [userproductDisplayController::class, 'show'])->name('products.show');
+        Route::resource('products', ProductsController::class, ['only' => ['index', 'show', 'lowStock', 'outOfStock']]);
+        Route::get('/products/low-stock', [ProductsController::class, 'lowStock'])->name('products.low-stock');
+        Route::get('/products/out-of-stock', [ProductsController::class, 'outOfStock'])->name('products.out-of-stock');
 
-        Route::post('/cart/add/{productId}', [CartController::class, 'add'])->name('cart.add');
-        Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
-        Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+        // Cart Routes
+        Route::post('/cart/add/{productId}', [WholesalerCartController::class, 'add'])->name('cart.add');
+        Route::get('/cart', [WholesalerCartController::class, 'show'])->name('cart.show');
+        Route::delete('/cart/remove/{id}', [WholesalerCartController::class, 'remove'])->name('cart.remove');
 
+        // Checkout Routes
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
         Route::post('/checkout', [CheckoutController::class, 'place'])->name('checkout.place');
+
+        // Order Routes
+        Route::get('/orders', [WholesalerOrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [WholesalerOrderController::class, 'show'])->name('orders.show');
+        Route::get('/orders/history', [WholesalerOrderController::class, 'history'])->name('orders.history');
+
+        // Payment Routes
+        Route::get('/payments', [WholesalerPaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/{order}', [WholesalerPaymentController::class, 'show'])->name('payments.show');
+        Route::post('/payments/{order}/pay', [WholesalerPaymentController::class, 'pay'])->name('payments.pay');
     });

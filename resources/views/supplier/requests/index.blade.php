@@ -61,7 +61,7 @@
                                     </td>
                                     <td class="text-secondary">{{ $request->created_at->format('M d, Y') }}</td>
                                     <td>
-                                        <a href="{{ route('supplier.requests.show', $request->id) }}" class="link-primary text-decoration-none small">
+                                        <a href="{{ route('supplier.requests.show', $request) }}" class="link-primary text-decoration-none small">
                                             View
                                         </a>
                                     </td>

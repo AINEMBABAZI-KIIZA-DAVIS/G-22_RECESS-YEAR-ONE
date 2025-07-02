@@ -8,31 +8,40 @@ class WholesalerController extends Controller
 {
     public function index()
     {
-        // Dummy product data
-        $products = [
-            (object)[
-                'id' => 1,
-                'name' => 'Premium Cupcakes ',
-                'price' => 50000,
-                'image' => 'https://images.unsplash.com/photo-1583823140300-13976ffcd426?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                'description' => 'Delicious cupcakes available for bulk buyers.',
-            ],
-            (object)[
-                'id' => 2,
-                'name' => 'Premium Cookies',
-                'price' => 30000,
-                'image' => 'https://plus.unsplash.com/premium_photo-1668863373830-c50ca78857cb?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                'description' => 'Freshly baked cookies available in bulk.',
-            ],
-            (object)[
-                'id' => 3,
-                'name' => 'Yummy Bread',
-                'price' => 20000,
-                'image' => 'https://plus.unsplash.com/premium_photo-1710108920120-b4c0463bb82d?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                'description' => 'Freshly baked bread available for wholesale.',
-            ],
-        ];
+        // Get dashboard statistics
+        $activeOrders = \App\Models\Order::where('user_id', auth()->id())
+            ->where('status', '!=', 'completed')
+            ->count();
 
-        return view('wholesaler.dashboard', compact('products'));
+        $pendingPayments = \App\Models\Order::where('user_id', auth()->id())
+            ->where('payment_status', 'pending')
+            ->sum('total_amount');
+
+        $recentOrders = \App\Models\Order::where('user_id', auth()->id())
+            ->where('status', 'completed')
+            ->where('created_at', '>=', now()->subDays(30))
+            ->count();
+
+        // Get stock statistics
+        $inStockItems = \App\Models\Product::where('stock', '>', 0)->count();
+        $lowStockItems = \App\Models\Product::where('stock', '<=', 10)->where('stock', '>', 0)->count();
+        $outOfStockItems = \App\Models\Product::where('stock', 0)->count();
+
+        // Get available products
+        $products = \App\Models\Product::where('stock', '>', 0)
+            ->with('images')
+            ->latest()
+            ->take(6)
+            ->get();
+
+        return view('wholesaler.dashboard', compact(
+            'products',
+            'activeOrders',
+            'pendingPayments',
+            'recentOrders',
+            'inStockItems',
+            'lowStockItems',
+            'outOfStockItems'
+        ));
     }
 }

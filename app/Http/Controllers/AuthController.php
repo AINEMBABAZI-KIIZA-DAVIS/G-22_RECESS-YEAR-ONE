@@ -33,22 +33,46 @@ class AuthController extends Controller
         $request->validate([
             'email'    => 'required|email',
             'password' => 'required',
+            '_token'   => 'required|string', // Ensure CSRF token is present
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
-            $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
 
+        if (Auth::attempt($credentials, $remember)) {
+            // Regenerate the session ID for security
+            $request->session()->regenerate();
+            
+            // Regenerate CSRF token
+            $request->session()->regenerateToken();
+            
             $user = Auth::user();
 
-            // Redirect to appropriate dashboard based on role
-            return match ($user->role) {
-                'admin'     => redirect()->route('admin.dashboard'),
-                'supplier'  => redirect()->route('supplier.dashboard'),
-                default     => redirect()->route('wholesaler.products.index'),
+            // Add user info to session
+            session([
+                'user_id' => $user->id,
+                'user_role' => $user->role,
+                'user_name' => $user->name,
+            ]);
+
+            // Redirect to intended URL or role-based dashboard
+            $route = match($user->role) {
+                'admin' => route('admin.dashboard'),
+                'supplier' => route('supplier.dashboard'),
+                'wholesaler' => route('wholesaler.products.index'),
+                default => null
             };
+
+            if (!$route) {
+                Auth::logout();
+                return back()->with('error', 'Invalid user role');
+            }
+
+            return redirect()->intended($route)
+                ->with('status', 'Welcome back, ' . ucfirst($user->role) . '!');
         }
 
-        return back()->with('error', 'Invalid credentials');
+        return back()->with('error', 'The provided credentials do not match our records.');
     }
 
     public function logout(Request $request)
