@@ -25,16 +25,28 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_
 model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
-# --- Predict and evaluate ---
+# --- Evaluate model ---
 y_pred = model.predict(X_test)
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print(classification_report(y_test, y_pred))
 
-# --- Score a new vendor ---
-new_vendor = pd.DataFrame([{
-    "financial_score": 72,
-    "compliance_score": 68,
-    "reputation_score": 75
-}])
-predicted_score = model.predict_proba(new_vendor)[0][1] * 100
-print(f"Predicted Validation Score: {predicted_score:.2f}/100")
+# ✅ Function to use in Flask
+def validate_vendor_logic(data: dict):
+    """
+    Predict vendor approval and score based on input scores.
+    Expects a dictionary with keys: financial_score, compliance_score, reputation_score
+    """
+    required_keys = {"financial_score", "compliance_score", "reputation_score"}
+    if not required_keys.issubset(data.keys()):
+        raise ValueError(f"Missing one of the required fields: {required_keys}")
+
+    new_vendor = pd.DataFrame([{
+        "financial_score": data["financial_score"],
+        "compliance_score": data["compliance_score"],
+        "reputation_score": data["reputation_score"]
+    }])
+
+    predicted_score = model.predict_proba(new_vendor)[0][1] * 100
+    prediction = model.predict(new_vendor)[0]  # 0 or 1
+
+    return round(predicted_score, 2), int(prediction)

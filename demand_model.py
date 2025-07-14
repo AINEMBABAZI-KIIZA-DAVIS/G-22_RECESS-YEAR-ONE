@@ -28,7 +28,7 @@ def predict_demand(product_name: int, days: int = 30) -> float:
 
 if __name__ == "__main__":
     try:
-        product_name = "Cookie"  # change to your product ID as needed
+        product_name = "Cookie"  # Change to your appropriate product name
         days = 30       # forecast period in days
         prediction = predict_demand(product_name, days)
         print(f"Predicted demand for {product_name} in {days} days: {prediction}")

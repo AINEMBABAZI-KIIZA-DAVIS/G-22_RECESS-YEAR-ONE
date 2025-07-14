@@ -45,7 +45,7 @@ model.fit(trainset)
 
 # ✅ Step 6: Evaluate
 predictions = model.test(testset)
-print("\n📊 RMSE (Root Mean Squared Error):", round(rmse(predictions), 4))
+print("\nRMSE (Root Mean Squared Error):", round(rmse(predictions), 3))
 
 # ✅ Step 7: Generate recommendations
 def get_recommendations(user_id, top_n=3):
@@ -78,7 +78,7 @@ def get_recommendations(user_id, top_n=3):
         """
         product_names_df = pd.read_sql(names_query, engine)
 
-        print(f"\n🎯 Top {top_n} Recommended Products for Customer {user_id}:\n")
+        print(f"\nTop {top_n} Recommended Products for Customer {user_id}:\n")
         print(product_names_df.to_string(index=False))
 
         return product_names_df
