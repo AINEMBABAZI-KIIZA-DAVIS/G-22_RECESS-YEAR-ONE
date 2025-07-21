@@ -19,6 +19,41 @@ class SupplyRequestController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $users = \App\Models\User::where('role', 'supplier')->get();
+        return view('admin.supply_requests.create', compact('users'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'product_name' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'description' => 'nullable|string|max:1000',
+            'priority' => 'nullable|in:low,medium,high',
+        ]);
+
+        $supplyRequest = SupplyRequest::create([
+            'user_id' => $request->user_id,
+            'product_name' => $request->product_name,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'priority' => $request->priority ?? 'medium',
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('admin.supply-requests.index')
+            ->with('success', 'Supply request created successfully.');
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(SupplyRequest $supplyRequest)

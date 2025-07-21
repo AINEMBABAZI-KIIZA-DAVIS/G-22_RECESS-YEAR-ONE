@@ -10,11 +10,6 @@ class Vendor extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'contact_person',
@@ -39,46 +34,8 @@ class Vendor extends Model
         'iban',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'rating' => 'float',
-        'is_active' => 'boolean',
-    ];
-
-    /**
-     * Get the products associated with the vendor.
-     */
-    public function products()
+    public function orders()
     {
-        return $this->hasMany(Product::class);
-    }
-
-    /**
-     * Get the purchase orders for the vendor.
-     */
-    public function purchaseOrders()
-    {
-        return $this->hasMany(PurchaseOrder::class);
-    }
-
-    /**
-     * Get the vendor's performance rating.
-     */
-    public function getPerformanceRatingAttribute()
-    {
-        // Calculate performance based on on-time delivery, quality, etc.
-        return $this->rating;
-    }
-
-    /**
-     * Scope a query to only include active vendors.
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
+        return $this->hasMany(Order::class);
     }
 }

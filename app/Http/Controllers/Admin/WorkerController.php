@@ -23,13 +23,21 @@ class WorkerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:workers,email',
             'phone' => 'nullable|string|max:20',
             'position' => 'nullable|string|max:255',
+            'supply_center' => 'nullable|string|max:255',
+            'current_role' => 'nullable|string|max:255',
         ]);
-        Worker::create($request->all());
-        return redirect()->route('admin.workers.index')->with('success', 'Worker created successfully.');
+
+        try {
+            Worker::create($request->all());
+            return redirect()->route('admin.workers.index')->with('success', 'Worker created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to create worker. Please try again.')->withInput();
+        }
     }
 
     public function edit(Worker $worker)
@@ -44,9 +52,16 @@ class WorkerController extends Controller
             'email' => 'required|email|unique:workers,email,' . $worker->id,
             'phone' => 'nullable|string|max:20',
             'position' => 'nullable|string|max:255',
+            'supply_center' => 'nullable|string|max:255',
+            'current_role' => 'nullable|string|max:255',
         ]);
-        $worker->update($request->all());
-        return redirect()->route('admin.workers.index')->with('success', 'Worker updated successfully.');
+
+        try {
+            $worker->update($request->all());
+            return redirect()->route('admin.workers.index')->with('success', 'Worker updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to update worker. Please try again.')->withInput();
+        }
     }
 
     public function destroy(Worker $worker)
@@ -54,4 +69,4 @@ class WorkerController extends Controller
         $worker->delete();
         return redirect()->route('admin.workers.index')->with('success', 'Worker deleted successfully.');
     }
-} 
+}

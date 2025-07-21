@@ -12,18 +12,24 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|min:6',
-            'role'     => 'required|in:admin,supplier,wholesaler',
+            'role' => 'required|in:admin,supplier,wholesaler,vendor',
         ]);
 
         $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'name' => $request->name,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => $request->role,
+            'role' => $request->role,
         ]);
+
+        // If vendor, log in and redirect to vendor dashboard
+        if ($user->role === 'vendor') {
+            Auth::login($user);
+            return redirect()->route('vendor.dashboard')->with('success', 'Registered successfully as a vendor!');
+        }
 
         return redirect()->route('login')->with('success', 'Registered successfully! You can now log in.');
     }
@@ -31,9 +37,9 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required',
-            '_token'   => 'required|string', // Ensure CSRF token is present
+            '_token' => 'required|string', // Ensure CSRF token is present
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -42,10 +48,10 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             // Regenerate the session ID for security
             $request->session()->regenerate();
-            
+
             // Regenerate CSRF token
             $request->session()->regenerateToken();
-            
+
             $user = Auth::user();
 
             // Add user info to session
@@ -56,10 +62,11 @@ class AuthController extends Controller
             ]);
 
             // Redirect to intended URL or role-based dashboard
-            $route = match($user->role) {
+            $route = match ($user->role) {
                 'admin' => route('admin.dashboard'),
                 'supplier' => route('supplier.dashboard'),
-                'wholesaler' => route('wholesaler.products.index'),
+                'wholesaler' => route('wholesaler.dashboard'),
+                'vendor' => route('vendor.dashboard'),
                 default => null
             };
 

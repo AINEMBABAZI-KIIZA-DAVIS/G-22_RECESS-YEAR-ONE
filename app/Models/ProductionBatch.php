@@ -31,6 +31,8 @@ class ProductionBatch extends Model
         'labor_cost',
         'material_cost',
         'other_costs',
+        'total_cost',
+        'cost_per_unit',
         'quality_check_passed',
         'quality_notes',
         'approved_by',

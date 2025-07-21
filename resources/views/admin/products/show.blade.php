@@ -25,7 +25,7 @@
                         <dd class="col-sm-9">{{ $product->description ?: 'N/A' }}</dd>
 
                         <dt class="col-sm-3">Price:</dt>
-                        <dd class="col-sm-9">${{ number_format($product->price, 2) }}</dd>
+                        <dd class="col-sm-9">UGX {{ number_format($product->price, 2) }}</dd>
 
                         <dt class="col-sm-3">Quantity in Stock:</dt>
                         <dd class="col-sm-9">{{ $product->quantity_in_stock }}</dd>

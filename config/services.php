@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'java_validation' => [
+        'url' => env('JAVA_VALIDATION_URL', 'http://localhost:8081/api/api/validate-vendor'),
+        'base_url' => env('JAVA_VALIDATION_BASE_URL', 'http://localhost:8081/api/api'),
+    ],
+
 ];

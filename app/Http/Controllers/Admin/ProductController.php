@@ -91,4 +91,16 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')
                          ->with('success', 'Product deleted successfully.');
     }
+
+    public function export()
+    {
+        $products = \App\Models\Product::all(['name', 'price', 'created_at']);
+        $csv = "Name,Price,Created At\n";
+        foreach ($products as $product) {
+            $csv .= "{$product->name},{$product->price},{$product->created_at}\n";
+        }
+        return response($csv)
+            ->header('Content-Type', 'text/csv')
+            ->header('Content-Disposition', 'attachment; filename=products.csv');
+    }
 }

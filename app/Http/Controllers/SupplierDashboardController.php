@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SupplyRequest;
+use App\Models\SupplierRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,20 +16,20 @@ class SupplierDashboardController extends Controller
         $user = Auth::user();
         
         // Get counts for the dashboard cards
-        $pendingRequestsCount = SupplyRequest::where('user_id', $user->id)
+        $pendingRequestsCount = SupplierRequest::where('user_id', $user->id)
                                            ->where('status', 'pending')
                                            ->count();
                                            
-        $confirmedRequestsCount = SupplyRequest::where('user_id', $user->id)
-                                             ->where('status', 'confirmed_by_manufacturer')
+        $confirmedRequestsCount = SupplierRequest::where('user_id', $user->id)
+                                             ->where('status', 'approved')
                                              ->count();
                                              
-        $fulfilledRequestsCount = SupplyRequest::where('user_id', $user->id)
+        $fulfilledRequestsCount = SupplierRequest::where('user_id', $user->id)
                                              ->where('status', 'fulfilled')
                                              ->count();
         
         // Get the latest requests for the activity feed
-        $recentRequests = SupplyRequest::where('user_id', $user->id)
+        $recentRequests = SupplierRequest::where('user_id', $user->id)
                                      ->latest()
                                      ->take(5)
                                      ->get();
@@ -51,9 +51,9 @@ class SupplierDashboardController extends Controller
         $user = Auth::user();
         $status = $request->query('status');
         
-        $query = SupplyRequest::where('user_id', $user->id);
+        $query = SupplierRequest::where('user_id', $user->id);
         
-        if ($status && in_array($status, ['pending', 'confirmed_by_manufacturer', 'fulfilled', 'rejected'])) {
+        if ($status && in_array($status, ['pending', 'approved', 'fulfilled', 'rejected'])) {
             $query->where('status', $status);
         }
         
@@ -63,11 +63,11 @@ class SupplierDashboardController extends Controller
             'requests' => $requests,
             'status' => $status,
             'statusCounts' => [
-                'all' => SupplyRequest::where('user_id', $user->id)->count(),
-                'pending' => SupplyRequest::where('user_id', $user->id)->where('status', 'pending')->count(),
-                'confirmed' => SupplyRequest::where('user_id', $user->id)->where('status', 'confirmed_by_manufacturer')->count(),
-                'fulfilled' => SupplyRequest::where('user_id', $user->id)->where('status', 'fulfilled')->count(),
-                'rejected' => SupplyRequest::where('user_id', $user->id)->where('status', 'rejected')->count(),
+                'all' => SupplierRequest::where('user_id', $user->id)->count(),
+                'pending' => SupplierRequest::where('user_id', $user->id)->where('status', 'pending')->count(),
+                'confirmed' => SupplierRequest::where('user_id', $user->id)->where('status', 'approved')->count(),
+                'fulfilled' => SupplierRequest::where('user_id', $user->id)->where('status', 'fulfilled')->count(),
+                'rejected' => SupplierRequest::where('user_id', $user->id)->where('status', 'rejected')->count(),
             ],
             'user' => $user
         ]);
@@ -92,7 +92,7 @@ class SupplierDashboardController extends Controller
             'notes' => 'nullable|string|max:1000',
         ]);
 
-        SupplyRequest::create([
+        SupplierRequest::create([
             'user_id' => Auth::id(),
             'product_name' => $request->product_name,
             'quantity' => $request->quantity,
@@ -109,7 +109,7 @@ class SupplierDashboardController extends Controller
      */
     public function listRequests()
     {
-        $requests = SupplyRequest::where('user_id', Auth::id())
+        $requests = SupplierRequest::where('user_id', Auth::id())
                                  ->latest()
                                  ->paginate(10);
         return view('supplier.requests.index', compact('requests'));
@@ -120,8 +120,8 @@ class SupplierDashboardController extends Controller
      */
     public function listConfirmedRequests()
     {
-        $requests = SupplyRequest::where('user_id', Auth::id())
-                                 ->where('status', 'confirmed_by_manufacturer')
+        $requests = SupplierRequest::where('user_id', Auth::id())
+                                 ->where('status', 'approved')
                                  ->latest()
                                  ->paginate(10);
         return view('supplier.requests.confirmed', compact('requests'));
@@ -129,7 +129,7 @@ class SupplierDashboardController extends Controller
      /**
      * Display the specified supply request.
      */
-    public function showRequest(SupplyRequest $supplyRequest)
+    public function showRequest(SupplierRequest $supplyRequest)
     {
         // Ensure the authenticated user is the one who created the request
         if ($supplyRequest->user_id !== Auth::id()) {

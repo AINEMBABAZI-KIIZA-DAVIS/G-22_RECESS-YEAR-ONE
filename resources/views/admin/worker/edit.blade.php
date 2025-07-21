@@ -1,69 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Worker</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: #f8fafc; font-family: 'Inter', Arial, sans-serif; }
-        .card {
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(53, 122, 255, 0.10);
-            border: none;
-        }
-        .card-header {
-            background: linear-gradient(90deg, #357aff 60%, #5eead4 100%);
-            color: #fff;
-            border-radius: 18px 18px 0 0;
-            font-size: 1.3rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-        .btn-primary {
-            background: linear-gradient(90deg, #357aff 60%, #5eead4 100%);
-            border: none;
-            font-weight: 600;
-        }
-        .btn-primary:hover {
-            background: linear-gradient(90deg, #2563eb 60%, #2dd4bf 100%);
-        }
-        .form-label { font-weight: 600; }
-    </style>
-</head>
-<body>
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-7 col-lg-6">
+@extends('layouts.admin_app')
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
             <div class="card">
-                <div class="card-header text-center">Edit Worker</div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-edit text-primary me-2"></i>
+                        Edit Worker
+                    </h4>
+                    <a href="{{ route('admin.workers.index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Workers
+                    </a>
+                </div>
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ route('admin.workers.update', $worker) }}" method="POST">
                         @csrf
                         @method('PUT')
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ $worker->name }}" required>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                                           id="name" name="name" value="{{ old('name', $worker->name) }}" required>
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                                           id="email" name="email" value="{{ old('email', $worker->email) }}" required>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control @error('phone') is-invalid @enderror" 
+                                           id="phone" name="phone" value="{{ old('phone', $worker->phone) }}">
+                                    @error('phone')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="position" class="form-label">Position</label>
+                                    <input type="text" class="form-control @error('position') is-invalid @enderror" 
+                                           id="position" name="position" value="{{ old('position', $worker->position) }}">
+                                    @error('position')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="supply_center" class="form-label">Supply Center</label>
+                                    <input type="text" class="form-control @error('supply_center') is-invalid @enderror" 
+                                           id="supply_center" name="supply_center" value="{{ old('supply_center', $worker->supply_center) }}">
+                                    @error('supply_center')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="current_role" class="form-label">Current Role</label>
+                                    <input type="text" class="form-control @error('current_role') is-invalid @enderror" 
+                                           id="current_role" name="current_role" value="{{ old('current_role', $worker->current_role) }}">
+                                    @error('current_role')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ $worker->email }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="position" class="form-label">Position</label>
-                            <input type="text" class="form-control" id="position" name="position" value="{{ $worker->position }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="supply_center" class="form-label">Supply Center</label>
-                            <input type="text" class="form-control" id="supply_center" name="supply_center" value="{{ $worker->supply_center }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="current_role" class="form-label">Current Role</label>
-                            <input type="text" class="form-control" id="current_role" name="current_role" value="{{ $worker->current_role }}">
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary">Update Worker</button>
-                            <a href="{{ route('admin.workers.index') }}" class="btn btn-secondary">Back</a>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Worker
+                            </button>
+                            <a href="{{ route('admin.workers.index') }}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
                         </div>
                     </form>
                 </div>
@@ -71,6 +103,4 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

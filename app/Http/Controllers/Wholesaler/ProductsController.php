@@ -10,8 +10,9 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        $products = Product::where('stock', '>', 0)
-            ->with('images')
+        $products = Product::where('quantity_in_stock', '>', 0)
+            ->where('is_active', true)
+           // ->with('images')
             ->latest()
             ->paginate(12);
 
@@ -20,9 +21,10 @@ class ProductsController extends Controller
 
     public function lowStock()
     {
-        $products = Product::where('stock', '<=', 10)
-            ->where('stock', '>', 0)
-            ->with('images')
+        $products = Product::whereColumn('quantity_in_stock', '<=', 'low_stock_threshold')
+            ->where('quantity_in_stock', '>', 0)
+            ->where('is_active', true)
+           // ->with('images')
             ->latest()
             ->paginate(12);
 
@@ -31,8 +33,9 @@ class ProductsController extends Controller
 
     public function outOfStock()
     {
-        $products = Product::where('stock', 0)
-            ->with('images')
+        $products = Product::where('quantity_in_stock', 0)
+            ->where('is_active', true)
+          //  ->with('images')
             ->latest()
             ->paginate(12);
 

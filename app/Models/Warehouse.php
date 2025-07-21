@@ -41,9 +41,9 @@ class Warehouse extends Model
     ];
 
     /**
-     * Get the inventories for the warehouse.
+     * Get the inventory for the warehouse.
      */
-    public function inventories()
+    public function inventory()
     {
         return $this->hasMany(Inventory::class);
     }

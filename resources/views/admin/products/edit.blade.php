@@ -38,7 +38,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
                         <div class="input-group">
-                            <span class="input-group-text">$</span>
+                            <span class="input-group-text">UGX</span>
                             <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price', $product->price) }}" step="0.01" min="0" required>
                         </div>
                         @error('price')

@@ -12,6 +12,13 @@ class Inventory extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'inventories';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -19,16 +26,27 @@ class Inventory extends Model
     protected $fillable = [
         'product_id',
         'warehouse_id',
-        'quantity_on_hand',
-        'quantity_allocated',
-        'quantity_available',
-        'reorder_point',
+        'quantity',
+        'reserved_quantity',
+        'available_quantity',
+        'unit_cost',
+        'total_cost',
+        'manufacture_date',
+        'expiry_date',
+        'location',
+        'shelf',
+        'bin',
+        'lot_number',
+        'serial_number',
+        'reference_type',
+        'reference_id',
+        'reorder_level',
         'reorder_quantity',
-        'last_counted_at',
-        'last_received_at',
-        'last_sold_at',
-        'status',
+        'minimum_quantity',
+        'maximum_quantity',
         'notes',
+        'is_active',
+        'last_updated_by',
     ];
 
     /**
@@ -37,14 +55,18 @@ class Inventory extends Model
      * @var array
      */
     protected $casts = [
-        'quantity_on_hand' => 'float',
-        'quantity_allocated' => 'float',
-        'quantity_available' => 'float',
-        'reorder_point' => 'float',
+        'quantity' => 'float',
+        'reserved_quantity' => 'float',
+        'available_quantity' => 'float',
+        'unit_cost' => 'float',
+        'total_cost' => 'float',
+        'reorder_level' => 'float',
         'reorder_quantity' => 'float',
-        'last_counted_at' => 'datetime',
-        'last_received_at' => 'datetime',
-        'last_sold_at' => 'datetime',
+        'minimum_quantity' => 'float',
+        'maximum_quantity' => 'float',
+        'manufacture_date' => 'date',
+        'expiry_date' => 'date',
+        'is_active' => 'boolean',
     ];
 
     /**

@@ -1,273 +1,282 @@
-@extends('layouts.app')
-
-@push('head')
-@endpush
-
-@section('header')
-    <h2 class="fw-semibold fs-4" style="color: #2b2d42;">
-        <i class="bi bi-grid-3x3-gap-fill me-2"></i>{{ __('Wholesaler Dashboard') }}
-    </h2>
-@endsection
+@extends('layouts.wholesaler_app')
 
 @section('content')
-<div class="py-4 min-vh-100 product-card">
-    <div class="container">
-        <div class="bg-white shadow-lg rounded-3 p-4" style="border-top: 4px solid #e76f51;">
-            <header class="mb-5 text-center dashboard-header py-5">
-                <div class="position-relative mb-3">
-                    <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" class="rounded-circle border border-4 border-white shadow-sm" style="width: 100px; height: 100px; object-fit: cover; border-color: #e76f51 !important;" alt="Wholesaler">
-                    <span class="position-absolute bottom-0 end-0 bg-success rounded-circle p-2" style="border: 3px solid white;"></span>
-                </div>
-                <h3 class="h3 fw-bold" style="color: #2b2d42;">Welcome back, {{ Auth::user()->name }}! <span class="wave">👋</span></h3>
-                <p class="text-muted">Manage your wholesale orders and inventory with ease.</p>
-            </header>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-semibold fs-4" style="color: var(--text-dark);">
+            <i class="bi bi-house-door-fill me-2" style="color: var(--primary-color);"></i>{{ __('Wholesaler Dashboard') }}
+        </h2>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+            </ol>
+        </nav>
+    </div>
 
-            <!-- Quick Actions -->
-            <div class="row g-4 mb-5">
-                <div class="col-md-4">
-                    <a href="{{ route('wholesaler.products.index') }}" class="card h-100 border-0 shadow-sm text-decoration-none hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-3 d-inline-flex mb-3" style="width: 60px; height: 60px; background: linear-gradient(145deg, rgba(231,111,81,0.1), rgba(231,111,81,0.2));">
-                                <i class="fas fa-store fs-3 m-auto"></i>
-                            </div>
-                            <h5 class="fw-semibold mb-2" style="color: #2b2d42;">Shop Products</h5>
-                            <p class="text-muted small mb-0">Browse and order products for your business.</p>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0 text-center pb-3">
-                            <span class="btn btn-sm" style="background-color: #e76f51; color: white; border-radius: 20px;">Shop Now <i class="bi bi-arrow-right ms-1"></i></span>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-md-4">
-                    <a href="{{ route('wholesaler.cart.show') }}" class="card h-100 border-0 shadow-sm text-decoration-none hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-3 d-inline-flex mb-3" style="width: 60px; height: 60px; background: linear-gradient(145deg, rgba(255,107,107,0.1), rgba(255,107,107,0.2));">
-                                <i class="fas fa-shopping-cart fs-3 m-auto"></i>
-                            </div>
-                            <h5 class="fw-semibold mb-2" style="color: #2b2d42;">View Cart</h5>
-                            <p class="text-muted small mb-0">See your current cart and proceed to checkout.</p>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0 text-center pb-3">
-                            <span class="btn btn-sm btn-outline-secondary" style="border-radius: 20px;">View Cart <i class="bi bi-arrow-right ms-1"></i></span>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-md-4">
-                    <a href="{{ route('wholesaler.checkout.index') }}" class="card h-100 border-0 shadow-sm text-decoration-none hover-lift">
-                        <div class="card-body text-center p-4">
-                            <div class="bg-success bg-opacity-10 text-success rounded-circle p-3 d-inline-flex mb-3" style="width: 60px; height: 60px; background: linear-gradient(145deg, rgba(78,191,196,0.1), rgba(78,191,196,0.2));">
-                                <i class="fas fa-credit-card fs-3 m-auto"></i>
-                            </div>
-                            <h5 class="fw-semibold mb-2" style="color: #2b2d42;">Checkout</h5>
-                            <p class="text-muted small mb-0">Complete your purchase and place orders.</p>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0 text-center pb-3">
-                            <span class="btn btn-sm btn-outline-secondary" style="border-radius: 20px;">Checkout <i class="bi bi-arrow-right ms-1"></i></span>
-                        </div>
-                    </a>
-                </div>
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-5" style="color:var(--primary-color);">🍞 Wholesaler Dashboard</h1>
+                <p class="lead">Welcome, {{ Auth::user()->name }}! Manage your orders, track inventory, and view analytics
+                    here.</p>
             </div>
-
-            <!-- Order Summary -->
-            <div class="mt-5">
-                <h4 class="h5 fw-bold mb-4" style="color: #2b2d42;">
-                    <i class="bi bi-cart-check me-2"></i>Order Summary
-                </h4>
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold" style="color: #2b2d42;">Active Orders</h5>
-                                <p class="text-muted small mb-3">Current orders in progress</p>
-                                <div class="d-flex align-items-center">
-                                    <span class="badge bg-warning text-dark me-2">{{ $activeOrders ?? 0 }}</span>
-                                    <a href="{{ route('wholesaler.orders.index') }}" class="text-decoration-none text-muted">
-                                        View Details <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+        </div>
+        <div class="row g-4 mb-5">
+            <!-- Monthly Spend Card -->
+            <div class="col-md-3">
+                <div class="h-100 p-4 rounded-3 shadow-sm card-hover"
+                    style="background: linear-gradient(135deg, #fff8f0 0%, #ffebd6 100%); border-left: 4px solid var(--secondary-color); position: relative; overflow: hidden;">
+                    <div class="position-absolute" style="top: -10px; right: -10px; opacity: 0.1;">
+                        <i class="fas fa-cart-shopping" style="font-size: 6rem; color: var(--secondary-color);"></i>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold" style="color: #2b2d42;">Pending Payments</h5>
-                                <p class="text-muted small mb-3">Amount due for current orders</p>
-                                <div class="d-flex align-items-center">
-                                    <span class="badge bg-danger text-white me-2">UGX {{ number_format($pendingPayments ?? 0) }}</span>
-                                    <a href="{{ route('wholesaler.payments.index') }}" class="text-decoration-none text-muted">
-                                        View Details <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
+                    <div class="d-flex justify-content-between align-items-center position-relative">
+                        <div>
+                            <small class="text-uppercase"
+                                style="color: var(--secondary-color); font-weight: 600; letter-spacing: 0.5px;">Monthly Spend</small>
+                            <div class="display-5 fw-bold mt-1" style="color: var(--text-dark);">UGX {{ number_format($monthlySpend, 2) }}</div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold" style="color: #2b2d42;">Recent Orders</h5>
-                                <p class="text-muted small mb-3">Completed orders in the last 30 days</p>
-                                <div class="d-flex align-items-center">
-                                    <span class="badge bg-success text-white me-2">{{ $recentOrders ?? 0 }}</span>
-                                    <a href="{{ route('wholesaler.orders.history') }}" class="text-decoration-none text-muted">
-                                        View Details <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
+                        <div class="bg-white rounded-circle p-3 shadow-sm"
+                            style="color: var(--secondary-color); border: 2px solid #ffe0b2;">
+                            <i class="fas fa-cart-shopping fs-4"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Stock Availability -->
-            <div class="mt-5">
-                <h4 class="h5 fw-bold mb-4" style="color: #2b2d42;">
-                    <i class="bi bi-box-seam me-2"></i>Stock Availability
-                </h4>
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold" style="color: #2b2d42;">In Stock Items</h5>
-                                <p class="text-muted small mb-3">Products currently available</p>
-                                <div class="d-flex align-items-center">
-                                    <span class="badge bg-success text-white me-2">{{ $inStockItems ?? 0 }}</span>
-                                    <a href="{{ route('wholesaler.products.index') }}" class="text-decoration-none text-muted">
-                                        View Products <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Avg. Fulfillment Card -->
+            <div class="col-md-3">
+                <div class="h-100 p-4 rounded-3 shadow-sm card-hover"
+                    style="background: linear-gradient(135deg, #f5efe8 0%, #e8d9c8 100%); border-left: 4px solid var(--primary-color); position: relative; overflow: hidden;">
+                    <div class="position-absolute" style="top: -10px; right: -10px; opacity: 0.1;">
+                        <i class="fas fa-clock" style="font-size: 6rem; color: var(--primary-color);"></i>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold" style="color: #2b2d42;">Low Stock Alert</h5>
-                                <p class="text-muted small mb-3">Items running low on stock</p>
-                                <div class="d-flex align-items-center">
-                                    <span class="badge bg-warning text-dark me-2">{{ $lowStockItems ?? 0 }}</span>
-                                    <a href="{{ route('wholesaler.products.low-stock') }}" class="text-decoration-none text-muted">
-                                        View Details <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
+                    <div class="d-flex justify-content-between align-items-center position-relative">
+                        <div>
+                            <small class="text-uppercase"
+                                style="color: var(--primary-color); font-weight: 600; letter-spacing: 0.5px;">Avg. Fulfillment</small>
+                            <div class="display-5 fw-bold mt-1" style="color: var(--text-dark);">
+                                {{ $fulfillmentSpeed ? round($fulfillmentSpeed, 1) . ' hrs' : 'N/A' }}</div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold" style="color: #2b2d42;">Out of Stock</h5>
-                                <p class="text-muted small mb-3">Items currently unavailable</p>
-                                <div class="d-flex align-items-center">
-                                    <span class="badge bg-danger text-white me-2">{{ $outOfStockItems ?? 0 }}</span>
-                                    <a href="{{ route('wholesaler.products.out-of-stock') }}" class="text-decoration-none text-muted">
-                                        View Details <i class="bi bi-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
+                        <div class="bg-white rounded-circle p-3 shadow-sm"
+                            style="color: var(--primary-color); border: 2px solid #d7ccc8;">
+                            <i class="fas fa-clock fs-4"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Available Products -->
-            <div class="mt-5">
-                <h4 class="h5 fw-bold mb-4" style="color: #2b2d42;">
-                    <i class="bi bi-box-seam me-2"></i>Available Products
-                </h4>
-                <div class="row g-4">
-                    @foreach ($products as $product)
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
-                            <img src="{{ $product->image }}" class="card-img-top" alt="{{ $product->name }}" style="height: 200px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold" style="color: #2b2d42;">{{ $product->name }}</h5>
-                                <p class="card-text text-muted small">{{ $product->description }}</p>
-                                <p class="fw-bold text-success mb-3">UGX {{ number_format($product->price) }}</p>
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="badge bg-{{ $product->stock > 0 ? 'success' : 'danger' }}" style="background: linear-gradient(145deg, {{ $product->stock > 0 ? 'rgba(78,191,196,0.1)' : 'rgba(217,4,41,0.1)' }}, {{ $product->stock > 0 ? 'rgba(78,191,196,0.2)' : 'rgba(217,4,41,0.2)' }});">
-                                        {{ $product->stock > 0 ? 'In Stock' : 'Out of Stock' }}
+            <!-- Recent Orders Card -->
+            <div class="col-md-3">
+                <div class="h-100 p-4 rounded-3 shadow-sm card-hover"
+                    style="background: linear-gradient(135deg, #f0e6d8 0%, #e0d0b8 100%); border-left: 4px solid #8d6e63; position: relative; overflow: hidden;">
+                    <div class="position-absolute" style="top: -10px; right: -10px; opacity: 0.1;">
+                        <i class="fas fa-truck" style="font-size: 6rem; color: #8d6e63;"></i>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center position-relative">
+                        <div>
+                            <small class="text-uppercase"
+                                style="color: #8d6e63; font-weight: 600; letter-spacing: 0.5px;">Recent Orders</small>
+                            <div class="display-5 fw-bold mt-1" style="color: var(--text-dark);">
+                                {{ $orders->count() }}</div>
+                        </div>
+                        <div class="bg-white rounded-circle p-3 shadow-sm"
+                            style="color: #8d6e63; border: 2px solid #d7ccc8;">
+                            <i class="fas fa-truck fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Products Card -->
+            <div class="col-md-3">
+                <div class="h-100 p-4 rounded-3 shadow-sm card-hover"
+                    style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-left: 4px solid #4caf50; position: relative; overflow: hidden;">
+                    <div class="position-absolute" style="top: -10px; right: -10px; opacity: 0.1;">
+                        <i class="fas fa-star" style="font-size: 6rem; color: #4caf50;"></i>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center position-relative">
+                        <div>
+                            <small class="text-uppercase"
+                                style="color: #4caf50; font-weight: 600; letter-spacing: 0.5px;">Top Products</small>
+                            <div class="display-5 fw-bold mt-1" style="color: var(--text-dark);">
+                                {{ $topProducts->count() }}</div>
+                        </div>
+                        <div class="bg-white rounded-circle p-3 shadow-sm"
+                            style="color: #4caf50; border: 2px solid #c8e6c9;">
+                            <i class="fas fa-star fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Quick Actions -->
+        <div class="mt-5 mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0" style="color: var(--text-dark); position: relative; display: inline-block;">
+                    <span style="position: relative; z-index: 1; background: var(--background-light); padding-right: 15px;">
+                        <i class="fas fa-bolt me-2" style="color: var(--primary-color);"></i>Quick Actions
+                    </span>
+                    <span
+                        style="position: absolute; bottom: 5px; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, var(--primary-light), var(--primary-color)); z-index: 0; border-radius: 4px;"></span>
+                </h5>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Product Catalog Card -->
+            <div class="col-md-4">
+                <a href="{{ route('wholesaler.catalog') }}"
+                    class="card h-100 border-0 text-decoration-none card-hover"
+                    style="background: linear-gradient(135deg, var(--background-light) 0%, #ffebd6 100%); border-left: 4px solid var(--secondary-color) !important;">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-white rounded-circle p-3 shadow-sm me-3"
+                                style="border: 2px solid #ffe0b2; color: var(--secondary-color);">
+                                <i class="fas fa-grid fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-semibold mb-1" style="color: var(--text-dark);">Product Catalog</h5>
+                                <p class="text-muted small mb-0">Browse and search through available products.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0 text-end p-3">
+                        <span class="btn btn-sm btn-secondary-custom"
+                            style="border-radius: 20px; padding: 0.35rem 1.25rem;">
+                            Browse Now <i class="bi bi-arrow-right ms-1"></i>
+                        </span>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Place Order Card -->
+            <div class="col-md-4">
+                <a href="{{ route('wholesaler.order.form') }}"
+                    class="card h-100 border-0 text-decoration-none card-hover"
+                    style="background: linear-gradient(135deg, var(--background-light) 0%, #e8d9c8 100%); border-left: 4px solid var(--primary-color) !important;">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-white rounded-circle p-3 shadow-sm me-3"
+                                style="border: 2px solid #d7ccc8; color: var(--primary-color);">
+                                <i class="fas fa-bag-plus fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-semibold mb-1" style="color: var(--text-dark);">Place Order</h5>
+                                <p class="text-muted small mb-0">Create a new order with our easy form.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0 text-end p-3">
+                        <span class="btn btn-sm btn-primary-custom"
+                            style="border-radius: 20px; padding: 0.35rem 1.25rem;">
+                            Order Now <i class="bi bi-arrow-right ms-1"></i>
+                        </span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Track Orders Card -->
+            <div class="col-md-4">
+                <a href="{{ route('wholesaler.orders.track') }}"
+                    class="card h-100 border-0 text-decoration-none card-hover"
+                    style="background: linear-gradient(135deg, var(--background-light) 0%, #e0d0b8 100%); border-left: 4px solid #8d6e63 !important;">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-white rounded-circle p-3 shadow-sm me-3"
+                                style="border: 2px solid #d7ccc8; color: #8d6e63;">
+                                <i class="fas fa-truck fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-semibold mb-1" style="color: var(--text-dark);">Track Orders</h5>
+                                <p class="text-muted small mb-0">Monitor the status of your orders.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0 text-end p-3">
+                        <span class="btn btn-sm"
+                            style="background-color: #8d6e63; color: white; border-radius: 20px; padding: 0.35rem 1.25rem;">
+                            Track Now <i class="bi bi-arrow-right ms-1"></i>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!-- Recent Activity -->
+        <div class="row mt-5">
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                    <div class="card-header bg-white border-0 pt-4 pb-3 px-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0 fw-bold" style="color: var(--text-dark); position: relative;">
+                                <span style="position: relative; z-index: 1; background: var(--background-light); padding-right: 15px;">
+                                    <i class="fas fa-history me-2" style="color: var(--primary-color);"></i>Recent Orders
+                                </span>
+                                <span style="position: absolute; bottom: 3px; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, var(--primary-light), var(--primary-color)); z-index: 0; border-radius: 4px;"></span>
+                            </h5>
+                            <div>
+                                <a href="{{ route('wholesaler.order.form') }}" class="btn btn-sm btn-success me-2">
+                                    <i class="bi bi-bag-plus"></i> Place Order
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="color: var(--primary-color); font-weight: 600;">Order #</th>
+                                        <th style="color: var(--primary-color); font-weight: 600;">Status</th>
+                                        <th style="color: var(--primary-color); font-weight: 600;">Total</th>
+                                        <th style="color: var(--primary-color); font-weight: 600;">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($orders as $order)
+                                        <tr>
+                                            <td><a href="{{ route('wholesaler.orders.show', $order->id) }}" style="color: var(--primary-color); text-decoration: none;">#{{ $order->id }}</a></td>
+                                            <td>
+                                                <span class="badge rounded-pill px-3 py-1" 
+                                                    style="background-color: {{ $order->status == 'Delivered' ? '#4caf50' : ($order->status == 'Pending' ? '#ff9800' : '#2196f3') }}; color: white; font-size: 0.7rem; font-weight: 600;">
+                                                    {{ $order->status }}
+                                                </span>
+                                            </td>
+                                            <td style="font-weight: 600;">UGX {{ number_format($order->total_amount, 2) }}</td>
+                                            <td style="color: var(--text-muted);">{{ $order->created_at->format('d M Y') }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                    <div class="card-header bg-white border-0 pt-4 pb-3 px-4">
+                        <h5 class="mb-0 fw-bold" style="color: var(--text-dark); position: relative;">
+                            <span style="position: relative; z-index: 1; background: var(--background-light); padding-right: 15px;">
+                                <i class="fas fa-star me-2" style="color: var(--primary-color);"></i>Top Products
+                            </span>
+                            <span style="position: absolute; bottom: 3px; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, var(--primary-light), var(--primary-color)); z-index: 0; border-radius: 4px;"></span>
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            @foreach($topProducts as $product)
+                                <div class="list-group-item border-0 py-3 px-4" style="background-color: var(--background-light); border-bottom: 1px solid #e8d9c8 !important;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span style="font-weight: 600; color: var(--text-dark);">{{ $product->name }}</span>
+                                        <span class="badge rounded-pill px-3 py-1" style="background-color: var(--primary-color); color: white; font-size: 0.7rem; font-weight: 600;">
+                                            Sold: {{ $product->sold ?? 'N/A' }}
+                                        </span>
                                     </div>
-                                    <span class="text-muted small">Stock: {{ $product->stock }}</span>
                                 </div>
-                                <form method="POST" action="{{ route('wholesaler.cart.add', ['productId' => $product->id]) }}" class="mt-auto" id="cartForm_{{ $product->id }}">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="quantity" value="1">
-                                    <input type="hidden" name="price" value="{{ $product->price }}">
-                                    <input type="hidden" name="stock" value="{{ $product->stock }}">
-                                    
-                                    @if($product->stock > 0)
-                                        <button type="submit" class="btn w-100" style="background-color: #e76f51; color: white;">
-                                            <i class="bi bi-cart-plus me-2"></i>Add to Cart
-                                        </button>
-                                    @else
-                                        <button type="button" class="btn w-100 btn-outline-secondary" disabled>
-                                            <i class="bi bi-cart-x me-2"></i>Out of Stock
-                                        </button>
-                                    @endif
-                                </form>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
-                    @endforeach
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Add event listeners to all cart forms
-    document.querySelectorAll('form[id^="cartForm_"]').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            const button = this.querySelector('button[type="submit"]');
-            if (button) {
-                // Disable the button to prevent double submission
-                button.disabled = true;
-                button.innerHTML = '<i class="bi bi-hourglass"></i> Adding...';
-                
-                // Submit the form
-                this.submit();
-            }
-        });
-    });
-});
-</script>
-@endpush
-
-@push('styles')
-<style>
-    .hover-lift {
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        border-radius: 1rem;
-    }
-    .hover-lift:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1) !important;
-    }
-    .wave {
-        animation-name: wave-animation;
-        animation-duration: 2.5s;
-        animation-iteration-count: infinite;
-        transform-origin: 70% 70%;
-        display: inline-block;
-    }
-    @keyframes wave-animation {
-        0% { transform: rotate(0.0deg) }
-        10% { transform: rotate(14.0deg) }
-        20% { transform: rotate(-8.0deg) }
-        30% { transform: rotate(14.0deg) }
-        40% { transform: rotate(-4.0deg) }
-        50% { transform: rotate(10.0deg) }
-        60% { transform: rotate(0.0deg) }
-        100% { transform: rotate(0.0deg) }
-    }
-</style>
-@endpush
 @endsection
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

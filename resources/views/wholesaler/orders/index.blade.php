@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.wholesaler_app')
 
 @section('header')
     <h2 class="fw-semibold fs-4" style="color: var(--secondary-color);">

@@ -42,9 +42,9 @@
                                 <tr>
                                     <td>{{ $item->product->name ?? 'N/A' }}</td>
                                     <td>{{ $item->product->sku ?? 'N/A' }}</td>
-                                    <td class="text-end">${{ number_format($item->unit_price, 2) }}</td>
+                                    <td class="text-end">UGX {{ number_format($item->unit_price, 2) }}</td>
                                     <td class="text-center">{{ $item->quantity }}</td>
-                                    <td class="text-end">${{ number_format($item->unit_price * $item->quantity, 2) }}</td>
+                                    <td class="text-end">UGX {{ number_format($item->unit_price * $item->quantity, 2) }}</td>
                                 </tr>
                                 @php $total += ($item->unit_price * $item->quantity); @endphp
                                 @endforeach
@@ -52,7 +52,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="4" class="text-end fw-bold">Total:</td>
-                                    <td class="text-end fw-bold">${{ number_format($total, 2) }}</td>
+                                    <td class="text-end fw-bold">UGX {{ number_format($total, 2) }}</td>
                                 </tr>
                             </tfoot>
                         </table>

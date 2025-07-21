@@ -1,94 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workers List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background: #f8fafc; font-family: 'Inter', Arial, sans-serif; }
-        .card {
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(53, 122, 255, 0.10);
-            border: none;
-        }
-        .card-header {
-            background: linear-gradient(90deg, #357aff 60%, #5eead4 100%);
-            color: #fff;
-            border-radius: 18px 18px 0 0;
-            font-size: 1.3rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-        .btn-primary, .btn-success {
-            background: linear-gradient(90deg, #357aff 60%, #5eead4 100%);
-            border: none;
-            font-weight: 600;
-        }
-        .btn-primary:hover, .btn-success:hover {
-            background: linear-gradient(90deg, #2563eb 60%, #2dd4bf 100%);
-        }
-        .table thead th {
-            background: #e0e7ff;
-            color: #357aff;
-            font-weight: 700;
-        }
-        .table-striped > tbody > tr:nth-of-type(odd) {
-            background-color: #f3f8ff;
-        }
-    </style>
-</head>
-<body>
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-11">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>Workers</span>
-                    <a href="{{ route('admin.workers.create') }}" class="btn btn-success">Add Worker</a>
+@extends('layouts.admin_app')
+
+@section('content')
+<div class="container-fluid px-4 py-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-6" style="color:var(--primary-color); font-weight: 700;">
+                        <i class="fas fa-users me-3"></i>Worker Management
+                    </h1>
+                    <p class="text-muted mb-0">Manage your workforce and team members</p>
                 </div>
-                <div class="card-body">
-                    @if(session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped align-middle">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Position</th>
-                                    <th>Supply Center</th>
-                                    <th>Current Role</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($workers as $worker)
-                                    <tr>
-                                        <td>{{ $worker->name }}</td>
-                                        <td>{{ $worker->email }}</td>
-                                        <td>{{ $worker->position }}</td>
-                                        <td>{{ $worker->supply_center }}</td>
-                                        <td>{{ $worker->current_role }}</td>
-                                        <td>
-                                            <a href="{{ route('admin.workers.edit', $worker) }}" class="btn btn-primary btn-sm">Edit</a>
-                                            <form action="{{ route('admin.workers.destroy', $worker) }}" method="POST" style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <a href="{{ route('admin.workers.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Add Worker
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Alert -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <!-- Workers Table Card -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Workers List</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th style="padding-left: 24px;">Name</th>
+                            <th>Email</th>
+                            <th>Position</th>
+                            <th>Supply Center</th>
+                            <th>Current Role</th>
+                            <th class="text-end" style="padding-right: 24px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($workers as $worker)
+                            <tr>
+                                <td style="padding-left: 24px;">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            <i class="fas fa-user text-primary" style="font-size: 1.2rem;"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-medium">{{ $worker->name }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-muted">{{ $worker->email }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ $worker->position }}</span>
+                                </td>
+                                <td>
+                                    <span class="text-muted">{{ $worker->supply_center }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">{{ $worker->current_role }}</span>
+                                </td>
+                                <td class="text-end" style="padding-right: 24px;">
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('admin.workers.edit', $worker) }}" 
+                                           class="btn btn-sm btn-outline-primary" 
+                                           title="Edit Worker">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('admin.workers.destroy', $worker) }}" 
+                                              method="POST" 
+                                              class="d-inline" 
+                                              onsubmit="return confirm('Are you sure you want to delete this worker?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" 
+                                                    class="btn btn-sm btn-outline-danger" 
+                                                    title="Delete Worker">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <div class="text-muted">
+                                        <i class="fas fa-users" style="font-size: 3rem; opacity: 0.3;"></i>
+                                        <p class="mt-3 mb-0">No workers found.</p>
+                                        <small>Start by adding your first worker.</small>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
+@push('styles')
+<style>
+    .btn-group .btn {
+        border-radius: 8px;
+        margin: 0 2px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-group .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+    
+    .table tbody tr:hover {
+        background: var(--background-light);
+        transform: scale(1.01);
+    }
+    
+    .badge {
+        font-size: 0.85em;
+        padding: 6px 12px;
+        border-radius: 20px;
+    }
+</style>
+@endpush
+@endsection

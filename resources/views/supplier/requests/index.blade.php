@@ -1,10 +1,4 @@
-@extends('layouts.app')
-
-@section('header')
-    <h2 class="fw-semibold fs-4 text-secondary">
-        {{ __('My Supply Requests') }}
-    </h2>
-@endsection
+@extends('layouts.supplier_app')
 
 @section('content')
 <div class="py-4">

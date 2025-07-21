@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.wholesaler_app')
 
 @section('content')
 <div class="max-w-xl mx-auto py-10">
@@ -9,7 +9,7 @@
             <label class="block mb-2">Select Product</label>
             <select name="product_id" class="w-full border px-4 py-2 rounded">
                 @foreach($products as $product)
-                    <option value="{{ $product->id }}">{{ $product->name }} - ${{ number_format($product->price, 2) }}</option>
+                    <option value="{{ $product->id }}">{{ $product->name }} - UGX {{ number_format($product->price, 2) }}</option>
                 @endforeach
             </select>
         </div>

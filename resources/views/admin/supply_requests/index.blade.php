@@ -4,7 +4,14 @@
 <div class="container-fluid px-4 py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Supplier Supply Requests</h2>
-        {{-- Admin typically doesn't create these, they manage incoming ones --}}
+        <div>
+            <a href="{{ route('admin.supplier-requests.index') }}" class="btn btn-info me-2">
+                <i class="fas fa-users me-2"></i>View Supplier Requests
+            </a>
+            <a href="{{ route('admin.supply-requests.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>New Request
+            </a>
+        </div>
     </div>
 
     @if (session('success'))
